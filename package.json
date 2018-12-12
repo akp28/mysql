@@ -1,0 +1,27 @@
+{
+  "name": "nodemysql",
+  "version": "1.0.0",
+  "description": "Amazon-like storefront using MySQL. The app takes in orders from customers and depletes stock from the store's inventory.",
+  "main": "customer.js",
+  "dependencies": {
+    "inquirer": "^6.2.1",
+    "mysql": "^2.16.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "Not Avaiable at this time"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akp28/nodemysql.git"
+  },
+  "keywords": [
+    "nodemysql"
+  ],
+  "author": "akp28",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akp28/nodemysql/issues"
+  },
+  "homepage": "https://github.com/akp28/nodemysql#readme"
+}
