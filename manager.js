@@ -12,7 +12,7 @@ var connectionPromise = new Promise(function(resolve, reject){
     resolve(
         connection.connect(function(err){
         if (err) throw err;
-        console.log("connected as id " + connection.threadId + "\n");
+        console.log("\n connected as id " + connection.threadId + "\n");
         })
     )
 }).catch(error => { console.log('caught', error.message); });
@@ -34,9 +34,11 @@ function checkInventory(){
     connectionPromise.then(function(){
         connection.query("SELECT * FROM products where stock_quantity < 5", function (err, res) {
         if (err) throw err;
-            // console.table(JSON.stringify(res));
-            if (res.index == null){
+             
+            if (!res.length){
                 console.log("Inventory looks Good");
+            }else{
+                console.table(JSON.stringify(res));
             }
 
             promptManager();
@@ -63,13 +65,13 @@ function addInventory() {
             },function (err, res) {
                 if (err) throw err;
                itemQuantity = res[0].stock_quantity + parseInt(answer.quantity);
-                console.table("addInv: " +JSON.stringify(res));
+                // console.table("addInv: " +JSON.stringify(res));
                 updateItem(itemQuantity,answer.id) ;
             });
-    //     }).then(function(){
-            
-    //     })
-     })
+        }).then(function(){
+            promptManager();
+        })
+    
     })
 
 }
@@ -86,22 +88,25 @@ function updateItem(itemQuantity,id){
                 id : id
             }
         ],function (err, res) {
-           console.log("+1"); 
+        //    console.log("+1"); 
           if (err) throw err;
-            console.table(res);  
+            console.log("Inventory added successfully");  
+            return res;
         })
-    }).then(function(){
-            connection.query("select * from products where ?",{
-                id : id
-            },function (err, res) {
-              if (err) throw err;
-              console.log('+2');
-              console.table(res);
-            })
-    }).then(function(){
-        console.log('+3');
-        promptManager(); 
-    });
+    })
+    // }).then(function(){
+    //         connection.query("select * from products where ?",{
+    //             id : id
+    //         },function (err, res) {
+    //           if (err) throw err;
+    //         //   console.log('+2');
+    //         //   console.table(res);
+    //         //   return res;
+    //         })
+    // }).then(function(){
+    //     console.log('+3');
+    //     promptManager(); 
+    // });
 
       
 }
@@ -171,7 +176,7 @@ function managerView(){
           choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory","Add New Product"]
        }
     ]) .then(function(input){
-        console.log("your choice:" + JSON.stringify(input));
+        console.log("your choice:" + JSON.stringify(input) + "\n");
         switch(input.action) {
             case 'View Products for Sale':
                 checkProducts();

@@ -9,9 +9,21 @@ Customer:
 - computes the cost
 - depletes the stock from the store's inventory
 
+![alt text](images/customer.gif "Customer js review")
+
 Manager can do below actions:
 
 - View Products for Sale
 - View Low Inventory
 - Add to Inventory
 - Add New Product
+
+![alt text](images/manager.gif "Manager js review")
+
+Technologies Used:
+
+The following technologies and tools were used
+
+- JavaScript
+- node.js
+- MySQL Workbench

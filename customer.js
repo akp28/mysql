@@ -25,7 +25,7 @@ function getOrder(){
         connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
             console.table(res);
-            userInput(res);
+            userInput();
         });
     })
 }
@@ -47,8 +47,8 @@ function updateDB(id,quantity){
     });
 }
 
-function userInput(rows) {
-    var mysqlreadResults = rows;
+function userInput() {
+    // var mysqlreadResults = rows;
     inquirer
        .prompt([{
           name: "productID",
@@ -62,27 +62,31 @@ function userInput(rows) {
           
        }
     ]) .then(function(input){
+
         var inputID = input.productID;
         var inputQuantity = input.Quantity;
-        for (var i = 0 ; i < mysqlreadResults.length; i++){
-            if (inputID == mysqlreadResults[i].id){
-                if (input.Quantity <= mysqlreadResults[i].stock_quantity){
-                    console.log("Order Eligble for purchase");
-                    var avaiableQuantity = mysqlreadResults[i].stock_quantity;
-                    var price = mysqlreadResults[i].price;
-                    var totalQuantity = avaiableQuantity - input.Quantity; 
-                    // console.log("avaiable quantity: " + totalQuantity);
-                    updateDB(inputID,totalQuantity);
-                   var totalCost = inputQuantity * price;
-                    console.log("\n  Order fulfilled! Your cost is $" + totalCost );
-                    customerPrompt();
-                }else{
-                    console.log("Insufficient quantity! ..");
-                    customerPrompt();
-                }
-            }
-        }
 
+        connection.query("SELECT * FROM products where ?",{id: inputID},function (err, res) {
+            // console.log("query " + JSON.stringify(res));
+            if (!res.length){
+                console.log("Enter valid input");
+                customerPrompt();
+            }else if (input.Quantity <= res[0].stock_quantity){
+                console.log("Order Eligble for purchase");
+                var avaiableQuantity = res[0].stock_quantity;
+                var price = res[0].price;
+                var totalQuantity = avaiableQuantity - input.Quantity; 
+                // console.log("avaiable quantity: " + totalQuantity);
+                updateDB(inputID,totalQuantity);
+               var totalCost = inputQuantity * price;
+                console.log("\n  Order fulfilled! You ordered cost is $" + totalCost + "\n" );
+                customerPrompt();
+            }else{
+                console.log("Insufficient quantity! .. \n");
+                customerPrompt();
+            }
+        })
+    
     });    
 }
 
