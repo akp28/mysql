@@ -85,23 +85,3 @@ function userInput(rows) {
 
     });    
 }
-
-function customerPrompt(){
-    inquirer.prompt({
-        name: "action",
-        type: "list",
-
-        message: " Would like to continue shopping?\n",
-        choices: ["Yes", "No"]
-    }).then(function(answer) {
-        switch(answer.action) {
-            case 'Yes':
-                getOrder();
-            break;
-
-            case 'No':
-                connection.end();
-            break;
-        }
-    })
-};
